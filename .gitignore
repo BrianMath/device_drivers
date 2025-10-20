@@ -1,0 +1,19 @@
+# Object files
+*.o
+*.ko
+
+# Build directory
+build/
+
+# Generated directories
+*/i386
+*/machine
+*/x86
+
+# Generated files
+export_syms
+opt_global.h
+
+# Typst
+*.typ
+
