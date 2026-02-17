@@ -42,60 +42,63 @@ int main(int argc, char *argv[]) {
     * -s size: resize the memory buffer to size.
     */
     while ((ch = getopt(argc, argv, "cs:")) != -1) {
-	switch (ch) {
-	    case 'c':
-		if (action != UNSET) {
-		    usage();
-		}
-		action = CLEAR;
-		break;
+		switch (ch) {
+		case 'c':
+			if (action != UNSET) {
+				usage();
+			}
+			action = CLEAR;
+			break;
 
 	    case 's':
-		if (action != UNSET) {
-		    usage();
-		}
-		action = SETSIZE;
-		size = (int)strtol(optarg, &p, 10);
+			if (action != UNSET) {
+				usage();
+			}
+			action = SETSIZE;
+			size = (int)strtol(optarg, &p, 10);
 
-		if (*p) {
-		    errx(1, "illegal size -- %s", optarg);
-		}
-		break;
+			if (*p) {
+				errx(1, "illegal size -- %s", optarg);
+			}
+			break;
 
 	    default:
-		usage();
-	}
+			usage();
+			break;
+		}
     }
 
     /*
     * Perform the chosen action.
     */
     if (action == CLEAR) {
-	fd = open("/dev/echo", O_RDWR);
-	if (fd < 0) {
-	    err(1, "open(/dev/echo)");
-	}
+		fd = open("/dev/echo", O_RDWR);
+		if (fd < 0) {
+			err(1, "open(/dev/echo)");
+		}
 
-	i = ioctl(fd, ECHO_CLEAR_BUFFER, NULL);
-	if (i < 0) {
-	    err(1, "ioctl(/dev/echo)");
-	}
+		i = ioctl(fd, ECHO_CLEAR_BUFFER, NULL);
+		if (i < 0) {
+			err(1, "ioctl(/dev/echo)");
+		}
 	
-	close(fd);
+		close(fd);
     } else if (action == SETSIZE) {
-	fd = open("/dev/echo", O_RDWR);
-	if (fd < 0) {
-	    err(1, "open(/dev/echo)");
-	}
+		fd = open("/dev/echo", O_RDWR);
+		if (fd < 0) {
+			err(1, "open(/dev/echo)");
+		}
 
-	i = ioctl(fd, ECHO_SET_BUFFER_SIZE, &size);
-	if (i < 0) {
-	    err(1, "ioctl(/dev/echo)");
-	}
+		i = ioctl(fd, ECHO_SET_BUFFER_SIZE, &size);
+		if (i < 0) {
+			err(1, "ioctl(/dev/echo)");
+		}
 
-	close(fd);
+		close(fd);
     } else {
-	usage();
+		usage();
     }
 
     return 0;
+}
+

@@ -60,13 +60,13 @@ echo_write(struct cdev *dev, struct uio *uio, int ioflag) {
 		(echo_message->buffer_size - 1 - uio->uio_offset > 0) ?
 		 echo_message->buffer_size - 1 - uio->uio_offset : 0);
     if (amount == 0) {
-	return error;
+		return error;
     }
     
     error = uiomove(echo_message->buffer, amount, uio);
     if (error != 0) {
-	uprintf("Write failed.\n");
-	return error;
+		uprintf("Write failed.\n");
+		return error;
     }
 
     echo_message->buffer[amount] = '\0';
@@ -87,30 +87,31 @@ echo_read(struct cdev *dev, struct uio *uio, int ioflag) {
     error = uiomove(echo_message->buffer + uio->uio_offset, amount, uio);
     
     if (error != 0) {
-	uprintf("Read failed.\n");
+		uprintf("Read failed.\n");
     }
 
     return error;
 }
 
-static int echo_set_buffer_size(int size) {
+static int
+echo_set_buffer_size(int size) {
     int error = 0;
 
     if (echo_message->buffer_size == size) {
-	return error;
+		return error;
     }
 
     if (size >= 128 && size <= 512) {
-	echo_message->buffer = realloc(echo_message->buffer, size,
+		echo_message->buffer = realloc(echo_message->buffer, size,
 				       M_ECHO, M_WAITOK);
-	echo_message->buffer_size = size;
+		echo_message->buffer_size = size;
 
-	if (echo_message->length >= size) {
-	    echo_message->length = size - 1;
-	    echo_message->buffer[size - 1] = '\0';
-	}
+		if (echo_message->length >= size) {
+			echo_message->length = size - 1;
+			echo_message->buffer[size - 1] = '\0';
+		}
     } else {
-	error = EINVAL;
+		error = EINVAL;
     }
 
     return error;
@@ -130,7 +131,7 @@ echo_ioctl(struct cdev *dev, u_long cmd, caddr_t data, int fflag, struct thread 
 	case ECHO_SET_BUFFER_SIZE:
 	    error = echo_set_buffer_size(*(int *)data);
 	    if (error == 0) {
-		uprintf("Buffer resized.\n");
+			uprintf("Buffer resized.\n");
 	    }
 	    break;
 
