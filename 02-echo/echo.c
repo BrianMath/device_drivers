@@ -91,7 +91,7 @@ echo_modevent(module_t mod __unused, int event, void *arg __unused) {
 	    echo_message = malloc(sizeof(echo_t), M_TEMP, M_WAITOK);
 	    // make_dev() cria o dispositivo em /dev
 	    echo_dev = make_dev(&echo_cdevsw, 0, UID_ROOT, GID_WHEEL,
-				0600, "echo");
+				0666, "echo");
 	    uprintf("Echo driver loaded.\n");
 	    break;
 	case MOD_UNLOAD:
